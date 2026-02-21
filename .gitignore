@@ -1,0 +1,42 @@
+# Compiled class files
+*.class
+target/
+*.jar
+*.war
+*.ear
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# VS Code
+.vscode/
+
+# Maven
+.mvn/
+mvnw
+mvnw.cmd
+
+# Logs
+*.log
+logs/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Application secrets - DO NOT COMMIT!
+application-local.properties
+application-dev.properties
+application-prod.properties
+
+# Keep example file for reference
+!application-example.properties

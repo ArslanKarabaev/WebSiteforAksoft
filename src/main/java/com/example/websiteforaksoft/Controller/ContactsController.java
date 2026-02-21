@@ -1,0 +1,78 @@
+package com.example.websiteforaksoft.Controller;
+
+import com.example.websiteforaksoft.Dto.ContactsDto;
+import com.example.websiteforaksoft.Service.ContactsService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/Contacts")
+@RequiredArgsConstructor
+public class ContactsController {
+
+    private final ContactsService contactsService;
+
+    @GetMapping
+    public ResponseEntity<List<ContactsDto>> getAllContacts() {
+        List<ContactsDto> contacts = contactsService.getAllContacts();
+        return ResponseEntity.ok(contacts);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ContactsDto> getContactsById(@PathVariable("id") Long id) {
+        ContactsDto contacts = contactsService.getContactsById(id);
+        return ResponseEntity.ok(contacts);
+    }
+
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ContactsDto> addContacts(@Validated(ContactsDto.OnCreate.class)
+                                                       @RequestBody ContactsDto contactsDto) {
+        ContactsDto savedContacts = contactsService.addContacts(contactsDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedContacts);
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ContactsDto> updateContacts(
+            @PathVariable Long id,
+            @Validated(ContactsDto.OnUpdate.class)
+            @RequestBody ContactsDto contactsDto) {
+        ContactsDto updatedContacts = contactsService.updateContacts(id, contactsDto);
+        return ResponseEntity.ok(updatedContacts);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteContacts(@PathVariable Long id) {
+        contactsService.deleteContacts(id);
+    }
+
+
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+//        Map<String, String> errors = new HashMap<>();
+//        ex.getBindingResult().getAllErrors().forEach((error) -> {
+//            String fieldName = ((FieldError) error).getField();
+//            String errorMessage = error.getDefaultMessage();
+//            errors.put(fieldName, errorMessage);
+//        });
+//        return errors;
+//    }
+//
+//
+//    @ExceptionHandler(RuntimeException.class)
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    public Map<String, String> handleRuntimeException(RuntimeException ex) {
+//        Map<String, String> error = new HashMap<>();
+//        error.put("error", ex.getMessage());
+//        return error;
+//    }
+}
