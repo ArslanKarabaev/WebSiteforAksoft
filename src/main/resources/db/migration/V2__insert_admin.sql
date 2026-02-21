@@ -1,8 +1,8 @@
 INSERT INTO users (name, email, password, role, is_active, created_at)
 VALUES (
            'Admin',
-           'admin@aksoft.kg',
-           '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', --admin123
+           'admin@gmail.com',
+           '$2a$12$oQVo7FYvuv2S8tzYMDf2/.se/Q96shw.xmSHO66OeFnbsVeRhrNEC', --admin123
            'ROLE_ADMIN',
            TRUE,
            CURRENT_DATE

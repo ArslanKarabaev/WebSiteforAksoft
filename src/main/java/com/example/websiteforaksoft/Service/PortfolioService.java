@@ -37,9 +37,7 @@ public class PortfolioService {
 
     @Transactional
     public PortfolioDto addPortfolio(PortfolioDto portfolioDto) {
-        if (portfolioRepo.existsById(portfolioDto.getId())) {
-            throw new DuplicateResourceException("Нашей работы", "id", portfolioDto.getId());
-        }
+
         Portfolio portfolio = portfolioMapper.toEntity(portfolioDto);
         portfolio.setCreatedAt(LocalDate.now());
         portfolio.setIsPublished(true);

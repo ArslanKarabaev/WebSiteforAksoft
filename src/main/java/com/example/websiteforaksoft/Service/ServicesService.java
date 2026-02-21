@@ -36,9 +36,9 @@ public class ServicesService {
 
     @Transactional
     public ServicesDto addService(ServicesDto servicesDto) {
-        if (servicesRepo.existsById(servicesDto.getId())) {
-            throw new DuplicateResourceException("Услуга", "id", servicesDto.getId());
-        }
+//        if (servicesRepo.existsById(servicesDto.getId())) {
+//            throw new DuplicateResourceException("Услуга", "id", servicesDto.getId());
+//        }
         Services services = servicesMapper.toEntity(servicesDto);
         services.setIsPublished(true);
         Services savedService = servicesRepo.save(services);

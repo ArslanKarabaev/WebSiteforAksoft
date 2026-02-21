@@ -54,9 +54,7 @@ public class NewsService {
 
     @Transactional
     public NewsDto addNews(NewsDto newsDto) {
-        if (newsRepo.existsById(newsDto.getId())) {
-            throw new DuplicateResourceException("Новости", "id", newsDto.getId());
-        }
+
         News news = newsMapper.toEntity(newsDto);
         news.setCreatedAt(LocalDate.now());
         news.setIsPublished(true);

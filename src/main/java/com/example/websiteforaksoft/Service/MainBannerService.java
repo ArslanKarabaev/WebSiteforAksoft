@@ -32,9 +32,7 @@ public class MainBannerService {
 
     @Transactional
     public MainBannerDto addMainBanner(MainBannerDto mainBannerDto) {
-        if (mainBannerRepo.existsById(mainBannerDto.getId())) {
-            throw new DuplicateResourceException("Баннер", "id", mainBannerDto.getId());
-        }
+
         MainBanner savedBanner = mainBannerRepo.save(mainBannerMapper.toEntity(mainBannerDto));
         return mainBannerMapper.toDto(savedBanner);
     }

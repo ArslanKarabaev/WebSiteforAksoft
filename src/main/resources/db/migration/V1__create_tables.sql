@@ -1,9 +1,7 @@
 --
--- PostgreSQL database dump
+-- PostgreSQL database dump - FIXED VERSION
+-- All ID columns now use BIGSERIAL for auto-increment
 --
-
--- Dumped from database version 16.1
--- Dumped by pg_dump version 16.1
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -17,212 +15,114 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 SET default_tablespace = '';
-
 SET default_table_access_method = heap;
 
---
--- Name: about; Type: TABLE; Schema: public; Owner: postgres
---
 
 CREATE TABLE public.about (
-                              id bigint NOT NULL,
-                              content character varying(255),
-                              updated_at date
+                              id BIGINT DEFAULT 1 PRIMARY KEY,
+                              content TEXT,
+                              updated_at DATE,
+                              CONSTRAINT chk_about_single_row CHECK (id = 1)
 );
 
+COMMENT ON TABLE public.about IS 'Информация "О нас" (только одна запись с id=1)';
 
-ALTER TABLE public.about OWNER TO postgres;
-
---
--- Name: contacts; Type: TABLE; Schema: public; Owner: postgres
---
 
 CREATE TABLE public.contacts (
-                                 id bigint NOT NULL,
-                                 address character varying(255),
-                                 email character varying(255),
-                                 google_map_url character varying(255),
-                                 phone character varying(255),
-                                 updated_at date
+                                 id BIGSERIAL PRIMARY KEY,
+                                 address TEXT NOT NULL,
+                                 email VARCHAR(255) NOT NULL,
+                                 google_map_url VARCHAR(500),
+                                 phone VARCHAR(20) NOT NULL,
+                                 updated_at DATE
 );
 
+COMMENT ON TABLE public.contacts IS 'Контактная информация компании';
 
-ALTER TABLE public.contacts OWNER TO postgres;
 
---
--- Name: main banner; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."main banner" (
-                                      id bigint NOT NULL,
-                                      button_link character varying(255),
-                                      button_text character varying(255),
-                                      image_url character varying(255),
-                                      is_active boolean,
-                                      subtitle character varying(255),
-                                      title character varying(255)
+CREATE TABLE public.main_banner (
+                                    id BIGSERIAL PRIMARY KEY,
+                                    title VARCHAR(255) NOT NULL,
+                                    subtitle VARCHAR(500),
+                                    button_text VARCHAR(100),
+                                    button_link VARCHAR(500),
+                                    image_url VARCHAR(500),
+                                    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+                                    created_at DATE,
+                                    updated_at DATE
 );
 
+CREATE INDEX idx_main_banner_is_active ON public.main_banner(is_active);
 
-ALTER TABLE public."main banner" OWNER TO postgres;
+COMMENT ON TABLE public.main_banner IS 'Главный баннер на главной странице';
 
---
--- Name: news; Type: TABLE; Schema: public; Owner: postgres
---
 
 CREATE TABLE public.news (
-                             id bigint NOT NULL,
-                             content character varying(255),
-                             created_at date,
-                             description character varying(255),
-                             image_url character varying(255),
-                             is_published boolean,
-                             title character varying(255),
-                             updated_at date
+                             id BIGSERIAL PRIMARY KEY,
+                             title VARCHAR(255) NOT NULL,
+                             description TEXT,
+                             content TEXT NOT NULL,
+                             image_url VARCHAR(500),
+                             is_published BOOLEAN NOT NULL DEFAULT TRUE,
+                             created_at DATE,
+                             updated_at DATE
 );
 
+CREATE INDEX idx_news_created_at ON public.news(created_at DESC);
+CREATE INDEX idx_news_is_published ON public.news(is_published);
 
-ALTER TABLE public.news OWNER TO postgres;
+COMMENT ON TABLE public.news IS 'Новости компании';
 
---
--- Name: portfolio; Type: TABLE; Schema: public; Owner: postgres
---
 
 CREATE TABLE public.portfolio (
-                                  id bigint NOT NULL,
-                                  created_at date,
-                                  description character varying(255),
-                                  image_url character varying(255),
-                                  is_published boolean,
-                                  project_url character varying(255),
-                                  title character varying(255)
+                                  id BIGSERIAL PRIMARY KEY,
+                                  title VARCHAR(255) NOT NULL,
+                                  description TEXT,
+                                  image_url VARCHAR(500),
+                                  project_url VARCHAR(500),
+                                  is_published BOOLEAN NOT NULL DEFAULT TRUE,
+                                  created_at DATE,
+                                  updated_at DATE
 );
 
+CREATE INDEX idx_portfolio_is_published ON public.portfolio(is_published);
+CREATE INDEX idx_portfolio_created_at ON public.portfolio(created_at DESC);
 
-ALTER TABLE public.portfolio OWNER TO postgres;
+COMMENT ON TABLE public.portfolio IS 'Портфолио проектов';
 
---
--- Name: services; Type: TABLE; Schema: public; Owner: postgres
---
 
 CREATE TABLE public.services (
-                                 id bigint NOT NULL,
-                                 description character varying(255),
-                                 icon_url character varying(255),
-                                 is_published boolean,
-                                 price bigint,
-                                 title character varying(255)
+                                 id BIGSERIAL PRIMARY KEY,
+                                 title VARCHAR(255) NOT NULL,
+                                 description TEXT,
+                                 price DECIMAL(10, 2),
+                                 icon_url VARCHAR(500),
+                                 is_published BOOLEAN NOT NULL DEFAULT TRUE,
+                                 created_at DATE,
+                                 updated_at DATE
 );
 
+CREATE INDEX idx_services_is_published ON public.services(is_published);
 
-ALTER TABLE public.services OWNER TO postgres;
+COMMENT ON TABLE public.services IS 'Услуги компании';
 
---
--- Name: users; Type: TABLE; Schema: public; Owner: postgres
---
 
 CREATE TABLE public.users (
-                              id bigint NOT NULL,
-                              created_at date,
-                              email character varying(255) NOT NULL,
-                              is_active boolean NOT NULL,
-                              name character varying(255) NOT NULL,
-                              password character varying(255) NOT NULL,
-                              role character varying(255) NOT NULL,
-                              updated_at date,
-                              CONSTRAINT users_role_check CHECK (((role)::text = ANY ((ARRAY['ROLE_ADMIN'::character varying, 'ROLE_USER'::character varying])::text[])))
+                              id BIGSERIAL PRIMARY KEY,
+                              name VARCHAR(255) NOT NULL UNIQUE,
+                              email VARCHAR(255) NOT NULL UNIQUE,
+                              password VARCHAR(255) NOT NULL,
+                              role VARCHAR(50) NOT NULL,
+                              is_active BOOLEAN NOT NULL DEFAULT TRUE,
+                              created_at DATE,
+                              updated_at DATE,
+                              CONSTRAINT users_role_check CHECK (role IN ('ROLE_ADMIN', 'ROLE_USER'))
 );
 
+CREATE INDEX idx_users_email ON public.users(email);
+CREATE INDEX idx_users_name ON public.users(name);
 
-ALTER TABLE public.users OWNER TO postgres;
-
---
--- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-ALTER TABLE public.users ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
-    SEQUENCE NAME public.users_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-    );
+COMMENT ON TABLE public.users IS 'Пользователи системы';
 
 
---
--- Name: about about_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.about
-    ADD CONSTRAINT about_pkey PRIMARY KEY (id);
-
-
---
--- Name: contacts contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.contacts
-    ADD CONSTRAINT contacts_pkey PRIMARY KEY (id);
-
-
---
--- Name: main banner main banner_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."main banner"
-    ADD CONSTRAINT "main banner_pkey" PRIMARY KEY (id);
-
-
---
--- Name: news news_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.news
-    ADD CONSTRAINT news_pkey PRIMARY KEY (id);
-
-
---
--- Name: portfolio portfolio_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.portfolio
-    ADD CONSTRAINT portfolio_pkey PRIMARY KEY (id);
-
-
---
--- Name: services services_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.services
-    ADD CONSTRAINT services_pkey PRIMARY KEY (id);
-
-
---
--- Name: users uk3g1j96g94xpk3lpxl2qbl985x; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT uk3g1j96g94xpk3lpxl2qbl985x UNIQUE (name);
-
-
---
--- Name: users uk6dotkott2kjsp8vw4d0m25fb7; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT uk6dotkott2kjsp8vw4d0m25fb7 UNIQUE (email);
-
-
---
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
-
-
---
--- PostgreSQL database dump complete
---
-
+-- End of database dump

@@ -32,9 +32,7 @@ public class ContactsService {
 
     @Transactional
     public ContactsDto addContacts(ContactsDto contactsDto) {
-        if (contactsRepo.existsById(contactsDto.getId())) {
-            throw new DuplicateResourceException("Контакты", "id", contactsDto.getId());
-        }
+
         Contacts contacts = contactsMapper.toEntity(contactsDto);
         contacts.setUpdatedAt(LocalDate.now());
         Contacts savedContacts = contactsRepo.save(contacts);
