@@ -10,6 +10,5 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface NewsMapper {
     NewsDto toDto(News news);
-    //Page<NewsDto> toDto(Page<News> newsPage);
     News toEntity(NewsDto newsDto);
 }

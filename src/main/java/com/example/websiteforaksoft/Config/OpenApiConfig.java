@@ -12,20 +12,16 @@ import org.springframework.context.annotation.Configuration;
 public class OpenApiConfig {
     @Bean
     public OpenAPI customOpenAPI() {
-        // Название схемы безопасности
         final String securitySchemeName = "bearerAuth";
 
         return new OpenAPI()
-                // Информация о API
                 .info(new Info()
                         .title("Aksoft Website API")
                         .version("1.0")
                         .description("REST API для сайта Aksoft с JWT авторизацией"))
 
-                // Добавляем требование авторизации для всех endpoints
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
 
-                // Определяем схему безопасности (JWT Bearer Token)
                 .components(new Components()
                         .addSecuritySchemes(securitySchemeName,
                                 new SecurityScheme()
