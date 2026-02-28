@@ -35,8 +35,12 @@ Thumbs.db
 
 # Application secrets - DO NOT COMMIT!
 application.properties
-application-dev.properties
-application-prod.properties
 
 # Keep example file for reference
 !application-example.properties
+
+# Docker secrets
+.env
+
+# Docker volumes
+postgres_data/
