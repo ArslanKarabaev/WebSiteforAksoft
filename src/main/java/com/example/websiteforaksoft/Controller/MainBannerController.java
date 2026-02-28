@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/MainBanner")
+@RequestMapping(path = "/api/mainBanner")
 @RequiredArgsConstructor
 public class MainBannerController {
     private final MainBannerService mainBannerService;

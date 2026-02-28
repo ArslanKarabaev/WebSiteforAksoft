@@ -4,6 +4,7 @@ import com.example.websiteforaksoft.Filter.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -43,14 +44,42 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/swagger-ui.html").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/about/**").permitAll()
-                        .requestMatchers("/api/contacts/**").permitAll()
-                        .requestMatchers("/api/mainBanner/**").permitAll()
-                        .requestMatchers("/api/news/**").permitAll()
-                        .requestMatchers("/api/portfolio/**").permitAll()
-                        .requestMatchers("/api/services/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/aboutUs").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/contacts", "/api/contacts/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/mainBanner/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/news/published").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/portfolio/published", "/api/portfolio/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/services/published", "/api/services/{id}").permitAll()
 
                         .requestMatchers("/api/users/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/api/aboutUs/").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/aboutUs/").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/api/contacts/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/contacts/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/contacts/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/api/mainBanner").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/mainBanner/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/mainBanner/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/mainBanner/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/api/news", "/api/news/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/news/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/news/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/news/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/api/portfolio").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/portfolio/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/portfolio/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/portfolio/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/api/services").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/services/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/services/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/services/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
                 )

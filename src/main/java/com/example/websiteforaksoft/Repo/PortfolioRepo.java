@@ -12,4 +12,7 @@ import java.util.Optional;
 public interface PortfolioRepo extends JpaRepository<Portfolio, Long> {
     Optional<Portfolio> findByIdAndIsPublishedTrue(Long id);
     List<Portfolio> findAllByIsPublishedTrue();
+
+    Optional<Portfolio> findByIdAndIsPublishedFalse(Long id);
+
 }

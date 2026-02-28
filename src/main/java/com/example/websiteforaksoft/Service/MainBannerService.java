@@ -62,22 +62,19 @@ public class MainBannerService {
         return mainBannerMapper.toDto(savedBanner);
     }
 
-    // TODO спросить стоило ли делать так, как ниже, или пусть удалялся бы объект полностью
     @Transactional
     public void deleteMainBanner(Long id){
-        MainBanner mainBanner = mainBannerRepo.findById(id)
+        MainBanner mainBanner = mainBannerRepo.findByIdAndIsActiveTrue(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Баннер", "id", id));
-        if(mainBanner.getIsActive()) {
             mainBanner.setIsActive(false);
-        }else throw new RuntimeException("Баннер уже деактивирован");
+            mainBannerRepo.save(mainBanner);
     }
 
     @Transactional
     public void restoreMainBanner(Long id){
         MainBanner mainBanner = mainBannerRepo.findByIdAndIsActiveFalse(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Баннер", "id", id));
-        if(!mainBanner.getIsActive()) {
             mainBanner.setIsActive(true);
-        }else throw new RuntimeException("Баннер уже активирован");
+            mainBannerRepo.save(mainBanner);
     }
 }

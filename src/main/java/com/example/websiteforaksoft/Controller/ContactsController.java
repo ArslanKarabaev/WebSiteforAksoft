@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/Contacts")
+@RequestMapping("/api/contacts")
 @RequiredArgsConstructor
 public class ContactsController {
 
@@ -53,6 +53,5 @@ public class ContactsController {
     public void deleteContacts(@PathVariable Long id) {
         contactsService.deleteContacts(id);
     }
-
 
 }

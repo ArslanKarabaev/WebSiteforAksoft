@@ -86,20 +86,17 @@ public class NewsService {
 
     @Transactional
     public void deleteNews(Long id) {
-        News news = newsRepo.findById(id)
+        News news = newsRepo.findByIdAndIsPublishedTrue(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Новости", "id", id));
-        if(news.getIsPublished()) {
-            news.setIsPublished(false);
-        }else throw new RuntimeException("Новости уже деактивированы");
-
+        news.setIsPublished(false);
+        newsRepo.save(news);
     }
 
     @Transactional
     public void restoreNews(Long id){
-        News news = newsRepo.findById(id)
+        News news = newsRepo.findByIdAndIsPublishedFalse(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Новости", "id", id));
-        if(!news.getIsPublished()) {
             news.setIsPublished(true);
-        }else throw new RuntimeException("Новости уже активированы");
+            newsRepo.save(news);
     }
 }

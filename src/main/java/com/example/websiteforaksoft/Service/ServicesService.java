@@ -36,9 +36,6 @@ public class ServicesService {
 
     @Transactional
     public ServicesDto addService(ServicesDto servicesDto) {
-//        if (servicesRepo.existsById(servicesDto.getId())) {
-//            throw new DuplicateResourceException("Услуга", "id", servicesDto.getId());
-//        }
         Services services = servicesMapper.toEntity(servicesDto);
         services.setIsPublished(true);
         Services savedService = servicesRepo.save(services);
@@ -70,18 +67,15 @@ public class ServicesService {
     public void deleteService(Long id) {
         Services services = servicesRepo.findByIdAndIsPublishedTrue(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Услуга", "id", id));
-        if(services.getIsPublished()) {
             services.setIsPublished(false);
             servicesRepo.save(services);
-        }else throw new RuntimeException("Услуга уже деактивирована");
     }
 
+    @Transactional
     public void restoreService(Long id) {
         Services services = servicesRepo.findByIdAndIsPublishedFalse(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Услуга", "id", id));
-        if(!services.getIsPublished()) {
             services.setIsPublished(true);
             servicesRepo.save(services);
-        }else throw new RuntimeException("Услуга уже активирована");
     }
 }

@@ -70,18 +70,16 @@ public class PortfolioService {
     public void deletePortfolio(Long id) {
         Portfolio portfolio = portfolioRepo.findByIdAndIsPublishedTrue(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Нашей работы", "id", id));
-        if(portfolio.getIsPublished()) {
-            portfolio.setIsPublished(false);
-        }else throw new RuntimeException("Наша работа уже деактивирована");
+        portfolio.setIsPublished(false);
+        portfolioRepo.save(portfolio);
     }
 
     @Transactional
     public void restorePortfolio(Long id) {
-        Portfolio portfolio = portfolioRepo.findById(id)
+        Portfolio portfolio = portfolioRepo.findByIdAndIsPublishedFalse(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Нашей работы", "id", id));
-        if(!portfolio.getIsPublished()) {
-            portfolio.setIsPublished(true);
-        }else throw new RuntimeException("Наша работа уже активирована");
+        portfolio.setIsPublished(true);
+        portfolioRepo.save(portfolio);
     }
 
 }

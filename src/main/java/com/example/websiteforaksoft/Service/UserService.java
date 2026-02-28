@@ -5,6 +5,7 @@ import com.example.websiteforaksoft.Dto.AuthDto.RegisterUpdateDto;
 import com.example.websiteforaksoft.Dto.UserDto;
 import com.example.websiteforaksoft.Entity.User;
 import com.example.websiteforaksoft.Enum.Role;
+import com.example.websiteforaksoft.Exception.DuplicateResourceException;
 import com.example.websiteforaksoft.Exception.ResourceNotFoundException;
 import com.example.websiteforaksoft.Mapper.UserMapper;
 import com.example.websiteforaksoft.Repo.UserRepo;
@@ -48,13 +49,13 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new ResourceNotFoundException("Пользователь", "id", id));
         if (updateDto.getName() != null) {
             if (userRepo.existsByName(updateDto.getName())) {
-                throw new ResourceNotFoundException("Пользователь", "name", updateDto.getName());
+                throw new DuplicateResourceException("Пользователь", "name", updateDto.getName());
             }
             user.setName(updateDto.getName());
         }
         if (updateDto.getEmail() != null) {
             if (userRepo.existsByEmail(updateDto.getEmail())) {
-                throw new ResourceNotFoundException("Пользователь", "email", updateDto.getEmail());
+                throw new DuplicateResourceException("Пользователь", "email", updateDto.getEmail());
             }
             user.setEmail(updateDto.getEmail());
         }
