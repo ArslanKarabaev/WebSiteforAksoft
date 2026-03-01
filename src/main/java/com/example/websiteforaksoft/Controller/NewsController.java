@@ -18,7 +18,7 @@ public class NewsController {
     private final NewsService newsService;
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<Page<NewsDto>> getNews(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
@@ -41,14 +41,13 @@ public class NewsController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<NewsDto> getNewsById(@PathVariable Long id) {
+    public ResponseEntity<NewsDto> getPublishedNewsById(@PathVariable Long id) {
         NewsDto news = newsService.getNewsById(id);
         return ResponseEntity.ok(news);
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<NewsDto> addNews(@Validated(NewsDto.OnCreate.class)
                                            @RequestBody NewsDto newsDto) {
         NewsDto savedNews = newsService.addNews(newsDto);
@@ -56,7 +55,7 @@ public class NewsController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<NewsDto> updateNews(
             @PathVariable Long id,
             @Validated(NewsDto.OnUpdate.class)
@@ -66,13 +65,13 @@ public class NewsController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public void deleteNews(@PathVariable Long id) {
         newsService.deleteNews(id);
     }
 
-    @PutMapping(path = "/restoreNews/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping(path = "/restore-news/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public void restoreNews(@PathVariable Long id){
         newsService.restoreNews(id);
     }

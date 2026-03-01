@@ -18,7 +18,7 @@ public class PortfolioController {
     private final PortfolioService portfolioService;
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<List<PortfolioDto>> getAllPortfolio(){
         List<PortfolioDto> portfolioDto = portfolioService.getAllPortfolio();
         return ResponseEntity.ok(portfolioDto);
@@ -37,7 +37,7 @@ public class PortfolioController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<PortfolioDto> addPortfolio(@Validated(PortfolioDto.OnCreate.class)
                                                      @RequestBody PortfolioDto portfolioDto){
         PortfolioDto savedPortfolio = portfolioService.addPortfolio(portfolioDto);
@@ -45,7 +45,7 @@ public class PortfolioController {
     }
 
     @PutMapping(path = "/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<PortfolioDto> updatePortfolio(
             @PathVariable Long id,
             @Validated(PortfolioDto.onUpdate.class)
@@ -55,13 +55,13 @@ public class PortfolioController {
     }
 
     @DeleteMapping(path = "/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public void deletePortfolio(@PathVariable Long id){
         portfolioService.deletePortfolio(id);
     }
 
-    @PutMapping(path = "/restorePortfolio/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping(path = "/restore-portfolio/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public void restorePortfolio(@PathVariable Long id){
         portfolioService.restorePortfolio(id);
     }

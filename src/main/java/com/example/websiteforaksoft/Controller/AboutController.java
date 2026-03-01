@@ -21,14 +21,14 @@ public class AboutController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<AboutDto> saveOrUpdateAboutInfo(@Valid @RequestBody AboutDto aboutDto) {
         AboutDto savedAbout = aboutService.saveOrUpdateAboutInfo(aboutDto);
         return ResponseEntity.ok(savedAbout);
     }
 
     @DeleteMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public void deleteAboutInfo() {
         aboutService.deleteAboutInfo();
     }

@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/mainBanner")
+@RequestMapping(path = "/api/main-banner")
 @RequiredArgsConstructor
 public class MainBannerController {
     private final MainBannerService mainBannerService;
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<List<MainBannerDto>> getAllMainBanners() {
         List<MainBannerDto> mainBanners = mainBannerService.getMainBanners();
         return ResponseEntity.ok(mainBanners);
@@ -31,7 +31,7 @@ public class MainBannerController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<MainBannerDto> addMainBanner(@Validated(MainBannerDto.OnCreate.class)
                                                        @RequestBody MainBannerDto mainBannerDto) {
         MainBannerDto savedBanner = mainBannerService.addMainBanner(mainBannerDto);
@@ -39,7 +39,7 @@ public class MainBannerController {
     }
 
     @PutMapping(path = "/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<MainBannerDto> updateMainBanner(
             @PathVariable Long id,
             @Validated(MainBannerDto.OnUpdate.class)
@@ -49,13 +49,13 @@ public class MainBannerController {
     }
 
     @DeleteMapping(path = "/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public void deleteMainBanner(@PathVariable Long id){
         mainBannerService.deleteMainBanner(id);
     }
 
-    @PutMapping(path = "/restoreMainBanner/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping(path = "/restore-main-banner/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public void restoreMainBanner(@PathVariable Long id){
         mainBannerService.restoreMainBanner(id);
     }

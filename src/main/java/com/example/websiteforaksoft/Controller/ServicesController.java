@@ -19,7 +19,7 @@ public class ServicesController {
     private final ServicesService servicesService;
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<List<ServicesDto>> getAllServices() {
         List<ServicesDto> servicesDto = servicesService.getAllServices();
         return ResponseEntity.ok(servicesDto);
@@ -38,7 +38,7 @@ public class ServicesController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<ServicesDto> addService(@Validated(ServicesDto.OnCreate.class)
                                                   @RequestBody ServicesDto servicesDto) {
         ServicesDto savedServices = servicesService.addService(servicesDto);
@@ -46,7 +46,7 @@ public class ServicesController {
     }
 
     @PutMapping(path = "/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<ServicesDto> updateService(
             @PathVariable Long id,
             @Validated(ServicesDto.OnUpdate.class)
@@ -57,13 +57,13 @@ public class ServicesController {
     }
 
     @DeleteMapping(path = "/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public void deleteService(@PathVariable Long id) {
         servicesService.deleteService(id);
     }
 
-    @PutMapping(path = "restoreService/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping(path = "restore-service/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public void restoreService(@PathVariable Long id) {
         servicesService.restoreService(id);
     }

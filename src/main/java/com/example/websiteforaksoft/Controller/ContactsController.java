@@ -31,7 +31,7 @@ public class ContactsController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<ContactsDto> addContacts(@Validated(ContactsDto.OnCreate.class)
                                                        @RequestBody ContactsDto contactsDto) {
         ContactsDto savedContacts = contactsService.addContacts(contactsDto);
@@ -39,7 +39,7 @@ public class ContactsController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<ContactsDto> updateContacts(
             @PathVariable Long id,
             @Validated(ContactsDto.OnUpdate.class)
@@ -49,7 +49,7 @@ public class ContactsController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public void deleteContacts(@PathVariable Long id) {
         contactsService.deleteContacts(id);
     }

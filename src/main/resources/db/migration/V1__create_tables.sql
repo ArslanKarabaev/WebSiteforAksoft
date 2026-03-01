@@ -115,8 +115,7 @@ CREATE TABLE public.users (
                               role VARCHAR(50) NOT NULL,
                               is_active BOOLEAN NOT NULL DEFAULT TRUE,
                               created_at DATE,
-                              updated_at DATE,
-                              CONSTRAINT users_role_check CHECK (role IN ('ROLE_ADMIN', 'ROLE_USER'))
+                              updated_at DATE
 );
 
 CREATE INDEX idx_users_email ON public.users(email);

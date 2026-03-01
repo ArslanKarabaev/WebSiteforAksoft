@@ -49,7 +49,7 @@ public class UserController {
         userService.deleteUserById(id);
     }
 
-    @PutMapping(path = "restoreUser/{id}")
+    @PutMapping(path = "restore-user/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public void restoreUser(@PathVariable Long id) {
         userService.restoreUser(id);
