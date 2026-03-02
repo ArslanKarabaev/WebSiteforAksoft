@@ -47,7 +47,7 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.GET, "/api/aboutUs").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/contacts", "/api/contacts/{id}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/mainBanner/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/main-banner/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/news/published").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/portfolio/published", "/api/portfolio/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/services/published", "/api/services/{id}").permitAll()
@@ -61,10 +61,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/contacts/**").hasAnyRole("ADMIN", "MANAGER")
                         .requestMatchers(HttpMethod.DELETE, "/api/contacts/**").hasAnyRole("ADMIN", "MANAGER")
 
-                        .requestMatchers(HttpMethod.GET, "/api/mainBanner").hasAnyRole("ADMIN", "MANAGER")
-                        .requestMatchers(HttpMethod.POST, "/api/mainBanner/**").hasAnyRole("ADMIN", "MANAGER")
-                        .requestMatchers(HttpMethod.PUT, "/api/mainBanner/**").hasAnyRole("ADMIN", "MANAGER")
-                        .requestMatchers(HttpMethod.DELETE, "/api/mainBanner/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers(HttpMethod.GET, "/api/main-banner").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers(HttpMethod.POST, "/api/main-banner/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers(HttpMethod.PUT, "/api/main-banner/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/main-banner/**").hasAnyRole("ADMIN", "MANAGER")
 
                         .requestMatchers(HttpMethod.GET, "/api/news", "/api/news/{id}").hasAnyRole("ADMIN", "MANAGER")
                         .requestMatchers(HttpMethod.POST, "/api/news/**").hasAnyRole("ADMIN", "MANAGER")
